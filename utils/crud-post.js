@@ -50,17 +50,41 @@ const showPost = (slug, cf) => {
 }
 
 // Update
-const updatePost= (slug, data, cf) => {
-    prisma.post.update({where: {slug}, data})
-    .then( p => cf(p))
-    .catch(err => console.error("Errore"))
+const updatePost = (slug, data, cf) => {
+    prisma.post.update({ where: { slug }, data })
+        .then(p => cf(p))
+        .catch(err => console.error("Errore"))
 }
 
 // Delete
-const deletePost=(slug, cf) => {
-    prisma.post.delete({where: {slug}})
-    .then( p => cf(p))
-    .catch(err => console.error("Errore"))
+const deletePost = (slug, cf) => {
+    prisma.post.delete({ where: { slug } })
+        .then(p => cf(p))
+        .catch(err => console.error("Errore"))
+}
+
+// Mostra solo quelli disponibili
+// index
+const indexPostsPublic = (cf) => {
+    prisma.post.findMany({
+        where: {
+            published: true
+        },
+        include: {
+            category: {
+                select: {
+                    name: true
+                }
+            },
+            tags: {
+                select: {
+                    name: true
+                }
+            }
+        }
+    })
+        .then(ps => cf(ps))
+        .catch(err => console.error("errore"));
 }
 
 module.exports = {
@@ -68,5 +92,6 @@ module.exports = {
     indexPosts,
     showPost,
     updatePost,
-    deletePost
+    deletePost,
+    indexPostsPublic,
 }
