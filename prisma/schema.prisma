@@ -31,7 +31,7 @@ model Category {
   name      String
   posts     Post[]
   createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 }
 
 model Tag {
@@ -39,5 +39,5 @@ model Tag {
   name      String
   posts     Post[]
   createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 }
