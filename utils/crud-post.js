@@ -12,18 +12,61 @@ const createPost = (data, cf) => {
 const indexPosts = (cf) => {
     prisma.post.findMany({
         include: {
-            category:{
+            category: {
                 select: {
-                    name:true
+                    name: true
                 }
             },
-            tags:{
+            tags: {
                 select: {
-                    name:true
+                    name: true
                 }
             }
         }
     })
-    .then( ps => cf(ps))
-    .catch(err => console.error("errore"));
+        .then(ps => cf(ps))
+        .catch(err => console.error("errore"));
+}
+
+// Show per slug
+const showPost = (slug, cf) => {
+    prisma.post.findUnique({
+        where: { slug },
+        include: {
+            category: {
+                select: {
+                    name: true
+                }
+            },
+            tags: {
+                select: {
+                    name: true
+                }
+            }
+        }
+    })
+        .then(p => cf(p))
+        .catch(err => console.error("errore"))
+}
+
+// Update
+const updatePost= (slug, data, cf) => {
+    prisma.post.update({where: {slug}, data})
+    .then( p => cf(p))
+    .catch(err => console.error("Errore"))
+}
+
+// Delete
+const deletePost=(slug, cf) => {
+    prisma.post.delete({where: {slug}})
+    .then( p => cf(p))
+    .catch(err => console.error("Errore"))
+}
+
+module.exports = {
+    createPost,
+    indexPosts,
+    showPost,
+    updatePost,
+    deletePost
 }
